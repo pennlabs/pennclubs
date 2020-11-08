@@ -1151,7 +1151,8 @@ class UserUUIDSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField("get_calendar_url")
 
     def get_calendar_url(self, obj):
-        return f"{settings.DEFAULT_DOMAIN}/api/calendar/{str(obj.profile.uuid_secret)}"
+        protocol = self.context["request"].scheme or "https"
+        return f"{protocol}://{settings.DEFAULT_DOMAIN}/api/calendar/{str(obj.profile.uuid_secret)}"
 
     class Meta:
         model = get_user_model()
